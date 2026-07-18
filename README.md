@@ -26,17 +26,17 @@ AMS coordinates specialized agents to inspect these areas, validate their findin
 
 AMS is intended to:
 
-* Discover the structure of a large repository
-* Identify project types, frameworks, and dependencies
-* Generate a repository dependency graph
-* Detect modernization blockers
-* Assess managed, native, and mixed-mode code separately
-* Build and test the repository where possible
-* Distinguish source-code issues from environment issues
-* Estimate modernization readiness
-* Recommend a dependency-aware migration order
-* Produce traceable modernization work items
-* Prevent unsupported or hallucinated recommendations
+- Discover the structure of a large repository
+- Identify project types, frameworks, and dependencies
+- Generate a repository dependency graph
+- Detect modernization blockers
+- Assess managed, native, and mixed-mode code separately
+- Build and test the repository where possible
+- Distinguish source-code issues from environment issues
+- Estimate modernization readiness
+- Recommend a dependency-aware migration order
+- Produce traceable modernization work items
+- Prevent unsupported or hallucinated recommendations
 
 ## Core Workflow
 
@@ -65,146 +65,17 @@ flowchart TD
 
 ## Agents
 
-### Repository Discovery Agent
+- Repository Discovery Agent
+- Managed Code Assessment Agent
+- Native and C++/CLI Assessment Agent
+- Build Assessment Agent
+- Test Assessment Agent
+- Modernization Planning Agent
+- Validation Agent
 
-Creates an inventory of the repository.
+Detailed prompts/specs for each agent are in `/agents`.
 
-Responsibilities include:
-
-* Locate solutions and projects
-* Detect project types
-* Identify target frameworks
-* Discover project references
-* Detect native and managed boundaries
-* Identify third-party dependencies
-* Locate test projects
-* Determine build entry points
-* Produce the initial dependency graph
-
-Example output:
-
-```json
-{
-  "projects": [],
-  "dependencies": [],
-  "buildOrder": [],
-  "entryPoints": [],
-  "testProjects": []
-}
-```
-
-### Managed Code Assessment Agent
-
-Analyzes managed C# and .NET projects.
-
-Checks include:
-
-* .NET Framework-only APIs
-* Unsupported or obsolete APIs
-* WPF and WinForms usage
-* Windows-specific dependencies
-* Legacy configuration patterns
-* Binary serialization
-* COM interoperability
-* Old NuGet packages
-* Telerik, DevExpress, or similar UI dependencies
-* Candidate target frameworks
-* Potential compatibility risks
-
-### Native and C++/CLI Assessment Agent
-
-Analyzes native C++ and mixed-mode projects.
-
-Checks include:
-
-* Native library dependencies
-* C++/CLI `/clr` usage
-* Mixed-mode assemblies
-* Runtime coupling
-* P/Invoke boundaries
-* COM dependencies
-* Exported native APIs
-* Managed-to-native bridge patterns
-* Compiler and toolset dependencies
-* Feasibility of modern .NET interoperability
-
-### Build Assessment Agent
-
-Attempts to restore and build the repository.
-
-Responsibilities include:
-
-* Detect required SDKs and toolchains
-* Restore package dependencies
-* Execute supported build commands
-* Capture errors and warnings
-* Identify the first blocking failure
-* Categorize failures
-* Distinguish environment failures from source failures
-* Avoid repeating identical failed build attempts
-
-### Test Assessment Agent
-
-Analyzes and executes available automated tests.
-
-Responsibilities include:
-
-* Discover test projects and frameworks
-* Run available tests
-* Report passed and failed tests
-* Identify projects without tests
-* Highlight high-risk untested areas
-* Assess whether existing tests are sufficient for modernization
-* Recommend characterization tests where required
-
-### Modernization Planning Agent
-
-Combines the assessment results into a modernization strategy.
-
-Produces:
-
-* Modernization readiness score
-* Dependency-aware migration sequence
-* Key blockers
-* Technical risks
-* Recommended proof of concept
-* Suggested target architecture
-* Workstreams
-* Candidate backlog items
-* Validation and rollback recommendations
-
-### Validation Agent
-
-Reviews the final assessment for quality and traceability.
-
-The validation agent ensures that:
-
-* Recommendations are supported by repository evidence
-* Referenced files and projects exist
-* Build conclusions match build logs
-* Risk ratings are consistent
-* Conflicting findings are resolved
-* Unsupported assumptions are removed
-* Missing evidence is explicitly identified
-
-## Agentic Behavior
-
-AMS is more than a collection of independent prompts.
-
-The orchestrator makes decisions based on repository findings.
-
-Examples:
-
-* Run the native assessment only when native C++ projects are detected.
-* Run the C++/CLI assessment only when `/clr` or mixed-mode projects exist.
-* Run UI-specific compatibility checks only when WPF, WinForms, Telerik, DevExpress, or similar dependencies are found.
-* Stop repeated build attempts after the same failure occurs more than once.
-* Request additional evidence when agents report conflicting dependencies.
-* Re-run the planning agent when validation identifies unsupported conclusions.
-* Escalate high-impact migration decisions for human approval.
-* Require every recommendation to reference a file, project, dependency, or execution result.
-
-## Proposed Repository Structure
+## Repository Structure
 
 ```text
 agentic-modernization-scout/
@@ -243,33 +114,7 @@ agentic-modernization-scout/
 
 ## Shared Workflow State
 
-Agents should communicate through structured files rather than relying entirely on conversational context.
-
-Example workflow state:
-
-```json
-{
-  "assessmentId": "ams-001",
-  "repositoryPath": "./sample-repository",
-  "status": "in-progress",
-  "detectedProjectTypes": [
-    "csharp",
-    "cpp",
-    "cpp-cli"
-  ],
-  "completedAgents": [
-    "repository-discovery"
-  ],
-  "pendingAgents": [
-    "managed-assessment",
-    "native-assessment",
-    "build-assessment"
-  ],
-  "findings": [],
-  "conflicts": [],
-  "humanApprovals": []
-}
-```
+Agents communicate through structured JSON files and must not rely solely on conversational context. The schema is available at `orchestrator/workflow-state.schema.json`.
 
 ## Example Final Report
 
@@ -295,133 +140,43 @@ Recommended migration order:
 7. Packaging and deployment
 ```
 
-## Modernization Readiness Areas
+## Initial Implementation Status
 
-The readiness score may consider:
+This repository includes:
 
-| Area                    | Example Considerations                                 |
-| ----------------------- | ------------------------------------------------------ |
-| Repository structure    | Project discoverability and dependency clarity         |
-| Build health            | Reproducibility and number of blocking failures        |
-| Framework compatibility | Supported target frameworks and API usage              |
-| Native interoperability | Complexity of native and managed boundaries            |
-| Dependency health       | Package age, support status, and platform restrictions |
-| Test readiness          | Coverage, reliability, and characterization tests      |
-| Deployment              | Installer, runtime, and packaging dependencies         |
-| Architecture            | Coupling, modularity, and migration seams              |
-| Operational readiness   | Logging, diagnostics, rollback, and monitoring         |
+- Initial orchestrator routing and state schema
+- Agent role definitions
+- Baseline output schemas
+- Starter execution scripts (`scripts/run-ams.py`, `scripts/run-ams.ps1`)
+- Output folders for generated artifacts
 
-## Initial Implementation Plan
+## Running AMS (starter flow)
 
-### Phase 1: Repository Discovery
+```bash
+python scripts/run-ams.py --repository-path ./sample-repository --assessment-id ams-001
+```
 
-* Implement project and solution discovery
-* Generate repository inventory
-* Build an initial dependency graph
-* Store results as structured JSON
+PowerShell:
 
-### Phase 2: Specialized Assessments
+```powershell
+./scripts/run-ams.ps1 -RepositoryPath ./sample-repository -AssessmentId ams-001
+```
 
-* Add managed code assessment
-* Add native and C++/CLI assessment
-* Add package and dependency analysis
-
-### Phase 3: Tool Execution
-
-* Add build execution
-* Add test execution
-* Capture logs and categorize failures
-
-### Phase 4: Planning
-
-* Generate readiness scores
-* Produce migration sequence
-* Create modernization backlog recommendations
-
-### Phase 5: Validation
-
-* Add evidence validation
-* Add conflict detection
-* Add retry and re-assessment rules
-* Add human approval gates
-
-### Phase 6: Parallelization
-
-* Run independent assessments concurrently
-* Preserve deterministic shared state
-* Merge findings through the orchestrator
+Generated files are written under `outputs/`.
 
 ## Guiding Principles
 
-### Evidence Before Recommendation
-
-Every important conclusion should reference repository evidence.
-
-Valid evidence includes:
-
-* Project files
-* Source files
-* Configuration files
-* Package manifests
-* Build logs
-* Test results
-* Dependency relationships
-* Compiler settings
-
-### Incremental Modernization
-
-AMS should recommend small, testable modernization steps instead of assuming the entire repository can be migrated at once.
-
-### Dependency-Aware Planning
-
-Projects should not be prioritized only by size or apparent simplicity. Migration order must account for dependency direction and runtime coupling.
-
-### Human Approval for High-Impact Decisions
-
-Decisions such as replacing a UI framework, changing interoperability boundaries, or redesigning deployment architecture should require human review.
-
-### Structured Agent Communication
-
-Agents should exchange validated JSON documents using defined schemas.
-
-### Repeatable Execution
-
-Running AMS against the same repository and configuration should produce comparable results.
-
-## Current Status
-
-AMS is currently an exploratory project intended to demonstrate:
-
-* Multi-agent specialization
-* Agent orchestration
-* Tool-driven repository analysis
-* Conditional routing
-* Shared workflow state
-* Validation loops
-* Retry policies
-* Human-in-the-loop modernization planning
-
-## Future Ideas
-
-Potential future capabilities include:
-
-* GitHub and Azure DevOps integration
-* Pull request modernization reviews
-* Automated dependency graph visualization
-* API compatibility scanning
-* Binary dependency inspection
-* Technical debt trend analysis
-* Migration backlog generation
-* Cost and effort estimation
-* Architecture decision record generation
-* Continuous modernization monitoring
-* Comparison of assessment results across branches
-* Integration with GitHub Copilot coding agents
+- Evidence before recommendation
+- Incremental modernization
+- Dependency-aware planning
+- Human approval for high-impact decisions
+- Structured agent communication
+- Repeatable execution
 
 ## License
 
-MIT
+MIT (the repository includes `LICENSE` at the root).
 
 ## Contributing
 
-Contribution guidance will be added as the project structure and implementation approach mature.
+Contribution guidance will be added as the implementation matures.

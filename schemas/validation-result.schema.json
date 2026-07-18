@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ams.local/schemas/validation-result.schema.json",
+  "title": "Validation Result",
+  "type": "object",
+  "required": ["assessmentId", "isValid", "errors", "missingEvidence", "conflicts"],
+  "properties": {
+    "assessmentId": { "type": "string" },
+    "isValid": { "type": "boolean" },
+    "errors": { "type": "array", "items": { "type": "string" } },
+    "missingEvidence": { "type": "array", "items": { "type": "string" } },
+    "conflicts": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,54 @@
+version: 1
+expressionLanguage: "functions-v1"
+expressionFunctions:
+  - contains(array, value)
+  - length(array)
+rules:
+  - id: always-run-repository-discovery
+    when: "true"
+    run: repository-discovery
+
+  - id: run-managed-assessment
+    when: "contains(state.detectedProjectTypes, 'csharp')"
+    run: managed-assessment
+
+  - id: run-native-assessment
+    when: "contains(state.detectedProjectTypes, 'cpp') or contains(state.detectedProjectTypes, 'cpp-cli')"
+    run: native-assessment
+
+  - id: run-build-assessment
+    when: "length(state.buildEntryPoints) > 0"
+    run: build-assessment
+
+  - id: run-test-assessment
+    when: "contains(state.completedAgents, 'build-assessment')"
+    run: test-assessment
+
+  - id: run-modernization-planner
+    when: >-
+      (
+        (contains(state.detectedProjectTypes, 'csharp') and contains(state.completedAgents, 'managed-assessment')) or
+        (not contains(state.detectedProjectTypes, 'csharp'))
+      ) and
+      (
+        ((contains(state.detectedProjectTypes, 'cpp') or contains(state.detectedProjectTypes, 'cpp-cli')) and contains(state.completedAgents, 'native-assessment')) or
+        (not contains(state.detectedProjectTypes, 'cpp') and not contains(state.detectedProjectTypes, 'cpp-cli'))
+      ) and
+      (
+        (length(state.buildEntryPoints) > 0 and contains(state.completedAgents, 'build-assessment') and contains(state.completedAgents, 'test-assessment')) or
+        (length(state.buildEntryPoints) == 0)
+      )
+    run: modernization-planner
+
+  - id: run-validation
+    when: "contains(state.completedAgents, 'modernization-planner')"
+    run: validation
+
+retryPolicy:
+  maxRetriesPerAgent: 2
+  stopRepeatedBuildFailureAfterOccurrences: 2
+
+humanApprovalGates:
+  - ui-framework-replacement
+  - interop-boundary-redesign
+  - deployment-architecture-redesign

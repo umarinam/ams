@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ams.local/schemas/repository-inventory.schema.json",
+  "title": "Repository Inventory",
+  "type": "object",
+  "required": ["projects", "dependencies", "buildOrder", "entryPoints", "testProjects"],
+  "properties": {
+    "projects": { "type": "array", "items": { "type": "object" } },
+    "dependencies": { "type": "array", "items": { "type": "object" } },
+    "buildOrder": { "type": "array", "items": { "type": "string" } },
+    "entryPoints": { "type": "array", "items": { "type": "string" } },
+    "testProjects": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false
+}

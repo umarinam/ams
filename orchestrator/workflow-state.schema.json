@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ams.local/schemas/workflow-state.schema.json",
+  "title": "AMS Workflow State",
+  "type": "object",
+  "required": [
+    "assessmentId",
+    "repositoryPath",
+    "status",
+    "detectedProjectTypes",
+    "completedAgents",
+    "pendingAgents",
+    "findings",
+    "conflicts",
+    "humanApprovals"
+  ],
+  "properties": {
+    "assessmentId": { "type": "string", "minLength": 1 },
+    "repositoryPath": { "type": "string", "minLength": 1 },
+    "status": {
+      "type": "string",
+      "enum": ["not-started", "in-progress", "blocked", "awaiting-approval", "completed", "failed"]
+    },
+    "detectedProjectTypes": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["csharp", "cpp", "cpp-cli", "other"] },
+      "uniqueItems": true
+    },
+    "buildEntryPoints": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": []
+    },
+    "completedAgents": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "pendingAgents": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "findings": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "conflicts": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "humanApprovals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["topic", "status"],
+        "properties": {
+          "topic": { "type": "string" },
+          "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+          "requestedAt": { "type": "string", "format": "date-time" },
+          "decidedAt": { "type": "string", "format": "date-time" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
