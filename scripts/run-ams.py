@@ -53,7 +53,7 @@ def main() -> int:
 
     dependency_graph = {"nodes": [], "edges": []}
 
-    starter_report = {
+    initial_modernization_plan = {
         "assessmentId": assessment_id,
         "readinessScore": 0,
         "blockers": ["No repository analysis has been executed yet."],
@@ -68,7 +68,7 @@ def main() -> int:
     write_json(state_output_path, state)
     write_json(output_root / "inventory" / f"{assessment_id}-inventory.json", inventory)
     write_json(output_root / "inventory" / f"{assessment_id}-dependency-graph.json", dependency_graph)
-    write_json(output_root / "reports" / f"{assessment_id}-modernization-plan.json", starter_report)
+    write_json(output_root / "reports" / f"{assessment_id}-modernization-plan.json", initial_modernization_plan)
 
     markdown_report = output_root / "reports" / f"{assessment_id}-modernization-report.md"
     markdown_report.parent.mkdir(parents=True, exist_ok=True)

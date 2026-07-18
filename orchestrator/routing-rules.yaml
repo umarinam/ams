@@ -25,7 +25,7 @@ rules:
     run: test-assessment
 
   - id: run-modernization-planner
-    when: "allRequiredAssessmentsComplete == true"
+    when: "contains(state.completedAgents, 'managed-assessment') and contains(state.completedAgents, 'native-assessment') and contains(state.completedAgents, 'build-assessment') and contains(state.completedAgents, 'test-assessment')"
     run: modernization-planner
 
   - id: run-validation
