@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ams.local/schemas/modernization-plan.schema.json",
+  "title": "Modernization Plan",
+  "type": "object",
+  "required": ["assessmentId", "readinessScore", "blockers", "risks", "migrationOrder", "backlogItems"],
+  "properties": {
+    "assessmentId": { "type": "string" },
+    "readinessScore": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "blockers": { "type": "array", "items": { "type": "string" } },
+    "risks": { "type": "array", "items": { "type": "object" } },
+    "migrationOrder": { "type": "array", "items": { "type": "string" } },
+    "backlogItems": { "type": "array", "items": { "type": "object" } },
+    "recommendedPoC": { "type": "string" },
+    "targetArchitecture": { "type": "string" }
+  },
+  "additionalProperties": false
+}
