@@ -420,7 +420,7 @@ Potential future capabilities include:
 
 ## License
 
-Add the selected license for the project here.
+MIT
 
 ## Contributing
 
