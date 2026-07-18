@@ -11,7 +11,7 @@
     "risks": { "type": "array", "items": { "type": "object" } },
     "migrationOrder": { "type": "array", "items": { "type": "string" } },
     "backlogItems": { "type": "array", "items": { "type": "object" } },
-    "recommendedPoC": { "type": "string" },
+    "recommendedProofOfConcept": { "type": "string" },
     "targetArchitecture": { "type": "string" }
   },
   "additionalProperties": false

@@ -78,7 +78,7 @@ def main() -> int:
         "risks": [],
         "migrationOrder": [],
         "backlogItems": [],
-        "recommendedPoC": "Run discovery and managed/native assessments to collect evidence.",
+        "recommendedProofOfConcept": "Run discovery and managed/native assessments to collect evidence.",
         "targetArchitecture": "To be determined from repository evidence.",
     }
 

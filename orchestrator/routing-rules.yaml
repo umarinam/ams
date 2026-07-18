@@ -45,7 +45,7 @@ rules:
     run: validation
 
 retryPolicy:
-  maxAttemptsPerAgent: 2
+  maxRetriesPerAgent: 2
   stopRepeatedBuildFailureAfterOccurrences: 2
 
 humanApprovalGates:
