@@ -10,15 +10,15 @@ Large legacy repositories are rarely modernized through a single framework upgra
 
 They often contain a combination of:
 
-- .NET Framework applications
-- Native C++ libraries
-- C++/CLI mixed-mode assemblies
-- WPF and WinForms user interfaces
-- Third-party UI frameworks
-- Legacy build systems
-- Platform-specific dependencies
-- Limited automated test coverage
-- Complex project dependency chains
+* .NET Framework applications
+* Native C++ libraries
+* C++/CLI mixed-mode assemblies
+* WPF and WinForms user interfaces
+* Third-party UI frameworks
+* Legacy build systems
+* Platform-specific dependencies
+* Limited automated test coverage
+* Complex project dependency chains
 
 AMS coordinates specialized agents to inspect these areas, validate their findings, and recommend a practical modernization path.
 
