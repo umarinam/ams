@@ -1,23 +1,27 @@
 version: 1
+expressionLanguage: "functions-v1"
+expressionFunctions:
+  - contains(array, value)
+  - length(array)
 rules:
   - id: always-run-repository-discovery
     when: "true"
     run: repository-discovery
 
   - id: run-managed-assessment
-    when: "state.detectedProjectTypes contains 'csharp'"
+    when: "contains(state.detectedProjectTypes, 'csharp')"
     run: managed-assessment
 
   - id: run-native-assessment
-    when: "state.detectedProjectTypes contains 'cpp' or state.detectedProjectTypes contains 'cpp-cli'"
+    when: "contains(state.detectedProjectTypes, 'cpp') or contains(state.detectedProjectTypes, 'cpp-cli')"
     run: native-assessment
 
   - id: run-build-assessment
-    when: "state.buildEntryPoints length > 0"
+    when: "length(state.buildEntryPoints) > 0"
     run: build-assessment
 
   - id: run-test-assessment
-    when: "state.completedAgents contains 'build-assessment'"
+    when: "contains(state.completedAgents, 'build-assessment')"
     run: test-assessment
 
   - id: run-modernization-planner
@@ -25,7 +29,7 @@ rules:
     run: modernization-planner
 
   - id: run-validation
-    when: "state.completedAgents contains 'modernization-planner'"
+    when: "contains(state.completedAgents, 'modernization-planner')"
     run: validation
 
 retryPolicy:

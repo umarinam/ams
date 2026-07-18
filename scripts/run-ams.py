@@ -64,7 +64,8 @@ def main() -> int:
         "targetArchitecture": "To be determined from repository evidence.",
     }
 
-    write_json(Path("orchestrator") / f"{assessment_id}-workflow-state.json", state)
+    state_output_path = output_root / "orchestrator" / f"{assessment_id}-workflow-state.json"
+    write_json(state_output_path, state)
     write_json(output_root / "inventory" / f"{assessment_id}-inventory.json", inventory)
     write_json(output_root / "inventory" / f"{assessment_id}-dependency-graph.json", dependency_graph)
     write_json(output_root / "reports" / f"{assessment_id}-modernization-plan.json", starter_report)
@@ -90,7 +91,7 @@ def main() -> int:
     )
 
     print(f"Initialized AMS starter artifacts for '{assessment_id}'")
-    print(f"Workflow state: orchestrator/{assessment_id}-workflow-state.json")
+    print(f"Workflow state: {state_output_path}")
     print(f"Outputs: {output_root.resolve()}")
     return 0
 

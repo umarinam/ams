@@ -23,3 +23,10 @@ The orchestrator controls execution order, shared workflow state, retries, and v
 - `outputs/reports/<assessmentId>-modernization-report.json`
 - `outputs/reports/<assessmentId>-modernization-report.md`
 - Updated workflow state
+
+## Routing Expression Language
+
+`routing-rules.yaml` uses a minimal function-based expression syntax:
+
+- `contains(array, value)`
+- `length(array)`
