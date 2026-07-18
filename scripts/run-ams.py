@@ -14,6 +14,22 @@ def write_json(path: Path, payload: dict) -> None:
     path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 
 
+def build_markdown_report(assessment_id: str) -> str:
+    return "\n".join(
+        [
+            f"# Modernization Readiness Report ({assessment_id})",
+            "",
+            "Modernization readiness: 0/100",
+            "",
+            "Primary blocker:",
+            "No repository analysis has been executed yet.",
+            "",
+            "Recommended first step:",
+            "Run repository discovery, then managed/native/build/test assessments.",
+        ]
+    ) + "\n"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run starter AMS workflow")
     parser.add_argument("--repository-path", required=True)
@@ -74,23 +90,7 @@ def main() -> int:
 
     markdown_report = output_root / "reports" / f"{assessment_id}-modernization-report.md"
     markdown_report.parent.mkdir(parents=True, exist_ok=True)
-    markdown_report.write_text(
-        "\n".join(
-            [
-                f"# Modernization Readiness Report ({assessment_id})",
-                "",
-                "Modernization readiness: 0/100",
-                "",
-                "Primary blocker:",
-                "No repository analysis has been executed yet.",
-                "",
-                "Recommended first step:",
-                "Run repository discovery, then managed/native/build/test assessments.",
-            ]
-        )
-        + "\n",
-        encoding="utf-8",
-    )
+    markdown_report.write_text(build_markdown_report(assessment_id), encoding="utf-8")
 
     print(f"Initialized AMS starter artifacts for '{assessment_id}'")
     print(f"Workflow state: {state_output_path}")
