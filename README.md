@@ -175,7 +175,7 @@ Generated files are written under `outputs/`.
 
 ## License
 
-MIT (see `LICENSE`).
+MIT (the repository includes `LICENSE` at the root).
 
 ## Contributing
 
