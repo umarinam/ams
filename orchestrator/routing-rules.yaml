@@ -26,10 +26,18 @@ rules:
 
   - id: run-modernization-planner
     when: >-
-      contains(state.completedAgents, 'managed-assessment') and
-      contains(state.completedAgents, 'native-assessment') and
-      contains(state.completedAgents, 'build-assessment') and
-      contains(state.completedAgents, 'test-assessment')
+      (
+        (contains(state.detectedProjectTypes, 'csharp') and contains(state.completedAgents, 'managed-assessment')) or
+        (not contains(state.detectedProjectTypes, 'csharp'))
+      ) and
+      (
+        ((contains(state.detectedProjectTypes, 'cpp') or contains(state.detectedProjectTypes, 'cpp-cli')) and contains(state.completedAgents, 'native-assessment')) or
+        (not contains(state.detectedProjectTypes, 'cpp') and not contains(state.detectedProjectTypes, 'cpp-cli'))
+      ) and
+      (
+        (length(state.buildEntryPoints) > 0 and contains(state.completedAgents, 'build-assessment') and contains(state.completedAgents, 'test-assessment')) or
+        (length(state.buildEntryPoints) == 0)
+      )
     run: modernization-planner
 
   - id: run-validation

@@ -30,8 +30,9 @@ def main() -> int:
         "status": "in-progress",
         "detectedProjectTypes": [],
         "buildEntryPoints": [],
-        "completedAgents": ["repository-discovery"],
+        "completedAgents": [],
         "pendingAgents": [
+            "repository-discovery",
             "managed-assessment",
             "native-assessment",
             "build-assessment",

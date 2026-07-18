@@ -30,3 +30,5 @@ The orchestrator controls execution order, shared workflow state, retries, and v
 
 - `contains(array, value)`
 - `length(array)`
+
+Supported operators include `and`, `or`, `not`, `==`, and `>`.
